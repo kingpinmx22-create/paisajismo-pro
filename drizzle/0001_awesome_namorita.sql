@@ -1,0 +1,62 @@
+CREATE TABLE `plants` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`name` varchar(200) NOT NULL,
+	`scientificName` varchar(200),
+	`type` enum('tree','plant','stone','shrub','grass') NOT NULL,
+	`price` decimal(10,2) NOT NULL,
+	`stock` int NOT NULL DEFAULT 0,
+	`region` varchar(100),
+	`climate` enum('tropical','subtropical','temperate','arid','mediterranean','all') NOT NULL DEFAULT 'all',
+	`sizeCategory` enum('small','medium','large','xlarge') NOT NULL,
+	`heightMin` decimal(6,2),
+	`heightMax` decimal(6,2),
+	`spacingMin` decimal(6,2) NOT NULL,
+	`spacingMax` decimal(6,2) NOT NULL,
+	`sun` enum('full','partial','shade') NOT NULL,
+	`maintenance` enum('low','medium','high') NOT NULL,
+	`waterNeeds` enum('low','medium','high') NOT NULL DEFAULT 'medium',
+	`description` text,
+	`imageUrl` text,
+	`active` boolean NOT NULL DEFAULT true,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `plants_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `project_items` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`projectId` int NOT NULL,
+	`plantId` int NOT NULL,
+	`quantity` int NOT NULL DEFAULT 1,
+	`positionX` decimal(8,4),
+	`positionY` decimal(8,4),
+	`unitPrice` decimal(10,2) NOT NULL,
+	`totalPrice` decimal(10,2) NOT NULL,
+	`notes` text,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	CONSTRAINT `project_items_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `projects` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`userId` int NOT NULL,
+	`name` varchar(200) NOT NULL,
+	`status` enum('capturing','analyzing','cleaning','designing','quoted','saved') NOT NULL DEFAULT 'capturing',
+	`originalImageUrl` text,
+	`originalImageKey` varchar(500),
+	`cleanedImageUrl` text,
+	`cleanedImageKey` varchar(500),
+	`renderedImageUrl` text,
+	`renderedImageKey` varchar(500),
+	`terrainAnalysis` json,
+	`designLayout` json,
+	`quotation` json,
+	`areaM2` decimal(10,2),
+	`climate` varchar(50),
+	`region` varchar(100),
+	`projectType` varchar(100),
+	`notes` text,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `projects_id` PRIMARY KEY(`id`)
+);
